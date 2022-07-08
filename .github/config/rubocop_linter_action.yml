@@ -1,0 +1,8 @@
+# .github/config/rubocop_linter_action.yml
+
+versions:
+  - rubocop
+  - rubocop-rails
+  - rubocop-performance: "1.5.1"
+  - rubocop-minitest: "latest"
+  - rubocop-rspec: "1.37.0"

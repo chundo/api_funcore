@@ -1,0 +1,88 @@
+# SQLite. Versions 3.8.0 and up are supported.
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem "sqlite3"
+#
+
+default: &default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+#default: &default
+#  adapter: postgresql
+#  encoding: unicode
+# For details on connection pooling, see Rails configuration guide
+# https://guides.rubyonrails.org/configuring.html#database-pooling
+#  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+#development2:
+#  primary:
+#    <<: *default
+#    database: defaultdb
+#    username: doadmin
+#    password: <%= ENV['DATABASE_PASSWORD'] %>
+#  project:
+#    <<: *default
+#    database: ideardev
+#    username: doadmin
+#    password: <%= ENV['DATABASE_PASSWORD'] %>
+#  project_replica:
+#    database: ideardeb_replay
+#    username: doadmin
+#    password: <%= ENV['DATABASE_PASSWORD'] %>
+#    replica: true
+#production:
+#  primary:
+#    <<: *default
+#    adapter: sqlite3
+#    database: db/production_primary.sqlite3
+#  project:
+#    <<: *default
+#    adapter: sqlite3
+#    database: db/production_project.sqlite3
+#  project_replica:
+#    <<: *default
+#    adapter: sqlite3
+#    database: db/production_project_replica.sqlite3
+#    replica: true
+
+development:
+  primary:
+    <<: *default
+    adapter: sqlite3
+    database: db/primary.sqlite3
+  project:
+    <<: *default
+    adapter: sqlite3
+    database: db/project.sqlite3
+  project_replica:
+    <<: *default
+    adapter: sqlite3
+    database: db/project_replica.sqlite3
+    replica: true
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: db/test.sqlite3
+
+production:
+  primary:
+    <<: *default
+    database: defaultdb
+    username: doadmin
+    password: <%= ENV['DATABASE_PASSWORD'] %>
+  project:
+    <<: *default
+    database: ideardev
+    username: doadmin
+    password: <%= ENV['DATABASE_PASSWORD'] %>
+  project_replica:
+    database: ideardeb_replay
+    username: doadmin
+    password: <%= ENV['DATABASE_PASSWORD'] %>
+    replica: true

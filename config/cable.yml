@@ -1,0 +1,10 @@
+development:
+  adapter: async
+
+test:
+  adapter: test
+
+production:
+  adapter: redis
+  #url: <%= ENV.fetch("REDIS_URL", "REDIS_PORT") { "redis://redis-18619.c274.us-east-1-3.ec2.cloud.redislabs.com:18619" } %>
+  #channel_prefix: srgundo-free-db

@@ -1,0 +1,29 @@
+production:
+  clients:
+    default:
+      database: data_base_name
+      username: username
+      password: password
+      hosts:
+        - localhost:27017
+
+    writeable:
+      database: ideardev
+      username: customers-api
+      password: development
+      hosts:
+        - localhost:27017
+
+developments:
+  clients:
+    default:
+      database: ideardev
+      hosts:
+        - localhost:27017
+      username: customers-api
+      password: development
+      options:
+        read:
+          mode: :secondary
+          tag_sets:
+            - use: web

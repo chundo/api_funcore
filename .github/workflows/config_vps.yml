@@ -1,0 +1,32 @@
+name: ConfigurationVps
+on: [pull_request]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@master
+      - uses: appleboy/ssh-action@master
+        with:
+          if: ${{ github.event_name == "push" && github.ref "refs/hads/vps"}}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          #key: ${{ secrets.SSH_SERVER }}
+          #port: ${{ secrets.PORT }}
+          #script: "pwd"
+          port: 22
+          script: |
+            rm -rf files.zip
+            wget https://github.com/chundo/file_deploy_ruby/archive/refs/heads/main.zip -O files.zip
+            rm -rf files
+            sudo apt-get update -y
+            sudo apt-get install -y unzip
+            unzip -d files files.zip
+            mv files/file_deploy_ruby-main/* files/
+            rm -rf deploy.sh
+            cp -r files/deploy.sh .
+            sh deploy.sh
+            # sudo rbenv install 3.1.2 &&
+            # sudo rbenv global 3.1.2 &&
+            # ruby -v

@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  role: one
+  my_model: one
+  action: MyString
+  method: MyString
+  allow: false
+  public: false
+  user: one
+  active: false
+  is_expired: false
+  expired_type: MyString
+  expired_value: MyString
+
+two:
+  role: two
+  my_model: two
+  action: MyString
+  method: MyString
+  allow: false
+  public: false
+  user: two
+  active: false
+  is_expired: false
+  expired_type: MyString
+  expired_value: MyString

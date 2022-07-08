@@ -1,0 +1,23 @@
+name: Deploy
+on: [pull_request]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@master
+      - uses: appleboy/ssh-action@master
+        with:
+          if: ${{ github.event_name == "push" && github.ref "refs/hads/deploy"}}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          #key: ${{ secrets.SSH_SERVER }}
+          #port: ${{ secrets.PORT }}
+          #script: "pwd"
+          port: 22
+          script: |
+            git clone https://github.com/chundo/ideardev.git
+            cd ideardev
+            bundle install
+            cap production deploy
