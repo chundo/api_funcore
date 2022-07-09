@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   post '/graphql', to: 'graphql#execute'
   namespace :api, defaults: { format: :json } do
     namespace :v1, defaults: { format: :json } do
+      get 'shopify_products' => 'home#shopify_products'
       resources :roles
       get 'parameters/find' => 'parameters#find'
       resources :parameters

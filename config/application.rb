@@ -4,6 +4,7 @@ require 'rails/all'
 require 'sidekiq/web'
 require 'google/cloud/storage'
 # require 'rails/mongoid'
+require 'shopify_api'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

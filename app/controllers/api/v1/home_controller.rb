@@ -5,6 +5,20 @@ require 'functions_framework'
 class Api::V1::HomeController < AppController
   # before_action :doorkeeper_authorize!, except: %i[]
   # before_action :set_user, except: %i[]
+  before_action :shopify
+
+  def shopify_products
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+
+    products = ShopifyAPI::Product.all(
+      session: session
+    )
+
+    render json: { products: products }, status: :ok
+  end
 
   def index
     date = I18n.l Time.now
@@ -141,5 +155,20 @@ class Api::V1::HomeController < AppController
     bucket = storage.create_bucket 'alkanza'
 
     puts "Bucket #{bucket.name} was created."
+  end
+
+  private
+
+  def shopify
+    ShopifyAPI::Context.setup(
+      api_key: ENV['SHOPIFY_API'],
+      api_secret_key: ENV['SHOPIFY_PASSWORD'],
+      host_name: ENV['SHOPIFY_SHOP_NAME'],
+      scope: 'read_orders,read_products,etc',
+      session_storage: ShopifyAPI::Auth::FileSessionStorage.new, # This is only to be used for testing, more information in session docs
+      is_embedded: true, # Set to true if you are building an embedded app
+      is_private: false, # Set to true if you are building a private app
+      api_version: '2022-07' # The vesion of the API you would like to use
+    )
   end
 end

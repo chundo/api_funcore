@@ -29,6 +29,10 @@ gem 'functions_framework'
 gem 'graphql'
 gem 'kaminari'
 
+gem 'rest-client'
+gem 'shopify_api'
+gem 'rack-cors'
+
 gem 'aws-sdk-s3'
 gem 'exponent-server-sdk'
 gem 'google-cloud-storage', '~> 1.11', require: false
