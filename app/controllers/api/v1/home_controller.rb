@@ -3,8 +3,8 @@
 require 'functions_framework'
 
 class Api::V1::HomeController < AppController
-  # before_action :doorkeeper_authorize!, except: %i[]
-  # before_action :set_user, except: %i[]
+  # before_action :doorkeeper_authorize!, except: %i[shopify_products shopify_create_product shopify_product shopify_update_product shopify_create_checkout]
+  # before_action :set_user, except: %i[shopify_products shopify_create_product shopify_product shopify_update_product shopify_create_checkout]
   before_action :shopify
 
   def shopify_products
@@ -18,6 +18,144 @@ class Api::V1::HomeController < AppController
     )
 
     render json: { products: products }, status: :ok
+  end
+
+  def shopify_create_product
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+    product = ShopifyAPI::Product.new(session: session)
+    product.title = 'Burton Custom Freestyle 151'
+    product.body_html = '<strong>Good snowboard!</strong>'
+    product.vendor = 'funcore'
+    product.product_type = 'donation'
+    product.images = [
+      {
+        'src' => 'http://example.com/rails_logo.gif'
+      }
+    ]
+    product.tags = [
+      'Barnes & Noble',
+      'Big Air',
+      "John's Fav"
+    ]
+    product.variants = [
+      {
+        'option1' => 'First',
+        'price' => '10.00',
+        'sku' => '123'
+      },
+      {
+        'option1' => 'Second',
+        'price' => '20.00',
+        'sku' => '123'
+      }
+    ]
+    product.save
+    render json: { product: product }, status: :ok
+  end
+
+  def shopify_product
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+    product = ShopifyAPI::Product.find(
+      session: session,
+      id: params[:id]
+    )
+    render json: { product: product }, status: :ok
+  end
+
+  def shopify_update_product
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+
+    product = ShopifyAPI::Product.new(session: session)
+    product.id = params[:id].to_i
+    product.title = 'New product title'
+    product.save
+
+    render json: { product: product }, status: :ok
+  end
+
+  def shopify_disable_product
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+
+    product = ShopifyAPI::Product.new(session: session)
+    product.id = params[:id].to_i
+    product.status = 'archived'
+    product.save
+
+    render json: { product: product }, status: :ok
+  end
+
+  def shopify_delete_product
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+
+    ShopifyAPI::Product.delete(
+      session: session,
+      id: params[:id].to_i
+    )
+
+    render json: { product: 'Product Delete' }, status: :ok
+  end
+
+  def shopify_create_order
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+
+    order = ShopifyAPI::Order.new(session: session)
+    order.email = 'foo@example.com'
+    order.fulfillment_status = 'fulfilled'
+    order.send_receipt = false
+    order.send_fulfillment_receipt = false
+    order.line_items = [
+      {
+        'variant_id' => params[:id].to_i,
+        'quantity' => 1
+      }
+    ]
+    order.save
+
+    render json: { order: order }, status: :ok
+  end
+
+  def shopify_orders
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+    orders = ShopifyAPI::Order.all(
+      session: session,
+      status: 'any'
+    )
+
+    render json: { orders: orders }, status: :ok
+  end
+
+  def shopify_order
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+    order = ShopifyAPI::Order.find(
+      session: session,
+      id: params[:id]
+    )
+
+    render json: { order: order }, status: :ok
   end
 
   def index

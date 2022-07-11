@@ -1,7 +1,7 @@
 class AppController < ActionController::API
   # protect_from_forgery with: :null_session
-  before_action :doorkeeper_authorize!, if: -> { validate_is_public }
-  before_action :set_user_public, if: -> { validate_is_public }
+  # before_action :doorkeeper_authorize!, if: -> { validate_is_public }
+  # before_action :set_user_public, if: -> { validate_is_public }
 
   around_action :switch_locale
   def switch_locale(&action)
