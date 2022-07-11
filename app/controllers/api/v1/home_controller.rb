@@ -14,7 +14,8 @@ class Api::V1::HomeController < AppController
     )
 
     products = ShopifyAPI::Product.all(
-      session: session
+      session: session,
+      ids: '7704761368818,7706497908978,7706497974514'
     )
 
     render json: { products: products }, status: :ok
@@ -26,34 +27,47 @@ class Api::V1::HomeController < AppController
       access_token: ENV['SHOPIFY_TOKEN']
     )
     product = ShopifyAPI::Product.new(session: session)
-    product.title = 'Burton Custom Freestyle 151'
-    product.body_html = '<strong>Good snowboard!</strong>'
-    product.vendor = 'funcore'
-    product.product_type = 'donation'
+    product.title = params[:title]
+    product.body_html = params[:body_html]
+    product.vendor = params[:vendor]
+    product.product_type = params[:product_type]
+    product.price = params[:price]
     product.images = [
       {
-        'src' => 'http://example.com/rails_logo.gif'
+        'src' => params[:image]
       }
     ]
-    product.tags = [
-      'Barnes & Noble',
-      'Big Air',
-      "John's Fav"
-    ]
+    product.tags = []
     product.variants = [
       {
-        'option1' => 'First',
-        'price' => '10.00',
-        'sku' => '123'
-      },
-      {
-        'option1' => 'Second',
-        'price' => '20.00',
-        'sku' => '123'
+        'option1' => params[:title],
+        'price' => params[:price],
+        'sku' => generate_code(1, 5),
+        'taxable' => false,
+        'requires_shipping' => false,
+        'inventory_quantity' => 106,
+        'inventory_management' => 'shopify',
+        'old_inventory_quantity' => 1000
       }
     ]
     product.save
     render json: { product: product }, status: :ok
+  end
+
+  def shopify_product_by
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+    products = ShopifyAPI::Product.all(
+      session: session
+    )
+
+    response = {}
+    products.each do |product|
+      response = product if product.title.eql?(params[:by])
+    end
+    render json: { product: response }, status: :ok
   end
 
   def shopify_product
@@ -65,6 +79,7 @@ class Api::V1::HomeController < AppController
       session: session,
       id: params[:id]
     )
+
     render json: { product: product }, status: :ok
   end
 
@@ -113,23 +128,37 @@ class Api::V1::HomeController < AppController
   def shopify_create_order
     session = ShopifyAPI::Auth::Session.new(
       shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
-      access_token: ENV['SHOPIFY_TOKEN']
+      access_token: ENV['SHOPIFY_TOKEN'],
+      is_online: true
     )
 
-    order = ShopifyAPI::Order.new(session: session)
-    order.email = 'foo@example.com'
-    order.fulfillment_status = 'fulfilled'
-    order.send_receipt = false
-    order.send_fulfillment_receipt = false
+    order = ShopifyAPI::DraftOrder.new(session: session)
+    order.email = params[:email]
+    # order.fulfillment_status = params[:fulfillment_status]
+    # order.send_receipt = params[:send_receipt]
+    # order.send_fulfillment_receipt = params[:send_fulfillment_receipt]
+    # order.financial_status = 'authorized'
     order.line_items = [
       {
-        'variant_id' => params[:id].to_i,
+        'variant_id' => params[:line_item].to_i,
         'quantity' => 1
       }
     ]
     order.save
 
-    render json: { order: order }, status: :ok
+    orders = ShopifyAPI::DraftOrder.all(
+      session: session
+    )
+
+    puts '----------------'
+    puts params[:email]
+
+    response = {}
+    orders.each do |orderi|
+      response = orderi if orderi.email.eql?(params[:email])
+    end
+
+    render json: { order: response }, status: :ok
   end
 
   def shopify_orders
@@ -137,12 +166,31 @@ class Api::V1::HomeController < AppController
       shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
       access_token: ENV['SHOPIFY_TOKEN']
     )
-    orders = ShopifyAPI::Order.all(
-      session: session,
-      status: 'any'
+    orders = ShopifyAPI::DraftOrder.all(
+      session: session
     )
 
     render json: { orders: orders }, status: :ok
+  end
+
+  def shopify_order_by
+    session = ShopifyAPI::Auth::Session.new(
+      shop: "#{ENV['SHOPIFY_SHOP_NAME']}.myshopify.com",
+      access_token: ENV['SHOPIFY_TOKEN']
+    )
+    orders = ShopifyAPI::DraftOrder.all(
+      session: session
+    )
+
+    puts '----------------'
+    puts params[:email]
+
+    response = {}
+    orders.each do |order|
+      response = order if order.email.eql?(params[:email])
+    end
+
+    render json: { order: orders }, status: :ok
   end
 
   def shopify_order
@@ -308,5 +356,10 @@ class Api::V1::HomeController < AppController
       is_private: false, # Set to true if you are building a private app
       api_version: '2022-07' # The vesion of the API you would like to use
     )
+  end
+
+  def generate_code(a, b)
+    code_randon = [('A'..'Z'), (0..9)].map(&:to_a).flatten
+    (a...b).map { code_randon[rand(code_randon.length)] }.join
   end
 end
