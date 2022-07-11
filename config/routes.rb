@@ -3,6 +3,15 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1, defaults: { format: :json } do
       get 'shopify_products' => 'home#shopify_products'
+      post 'shopify_create_product' => 'home#shopify_create_product'
+      get 'shopify_product/:id' => 'home#shopify_product'
+      put 'shopify_update_product/:id' => 'home#shopify_update_product'
+      put 'shopify_disable_product/:id' => 'home#shopify_disable_product'
+      delete 'shopify_delete_product/:id' => 'home#shopify_delete_product'
+      get 'shopify_create_checkout/:id' => 'home#shopify_create_checkout'
+      post 'shopify_orders' => 'home#shopify_orders'
+      get 'shopify_orders' => 'home#shopify_orders'
+      get 'shopify_order/:id' => 'home#shopify_order'
       resources :roles
       get 'parameters/find' => 'parameters#find'
       resources :parameters
