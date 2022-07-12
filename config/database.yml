@@ -62,15 +62,15 @@ production:
   primary:
     <<: *default
     database: funcore
-    username: doadmin
+    username: <%= ENV['DATABASE_USERNAME'] %>
     password: <%= ENV['DATABASE_PASSWORD'] %>
   project:
     <<: *default
     database: funcore_r
-    username: doadmin
+    username: <%= ENV['DATABASE_USERNAME'] %>
     password: <%= ENV['DATABASE_PASSWORD'] %>
   project_replica:
     database: funcore_rr
-    username: doadmin
+    username: <%= ENV['DATABASE_USERNAME'] %>
     password: <%= ENV['DATABASE_PASSWORD'] %>
     replica: true
