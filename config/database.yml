@@ -1,15 +1,3 @@
-# SQLite. Versions 3.8.0 and up are supported.
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem "sqlite3"
-#
-
-#default: &default
-#  adapter: sqlite3
-#  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-#  timeout: 5000
-
 default: &default
   adapter: postgresql
   encoding: unicode
@@ -48,20 +36,20 @@ default: &default
 #    database: db/production_project_replica.sqlite3
 #    replica: true
 
-#development:
-#  primary:
-#    <<: *default
-#    adapter: sqlite3
-#    database: db/primary.sqlite3
-#  project:
-#    <<: *default
-#    adapter: sqlite3
-#    database: db/project.sqlite3
-#  project_replica:
-#    <<: *default
-###    adapter: sqlite3
-#    database: db/project_replica.sqlite3
-#    replica: true
+development:
+  primary:
+    <<: *default
+    adapter: sqlite3
+    database: db/primary.sqlite3
+  project:
+    <<: *default
+    adapter: sqlite3
+    database: db/project.sqlite3
+  project_replica:
+    <<: *default
+    adapter: sqlite3
+    database: db/project_replica.sqlite3
+    replica: true
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -73,16 +61,16 @@ test:
 production:
   primary:
     <<: *default
-    database: defaultdb
+    database: funcore
     username: doadmin
     password: <%= ENV['DATABASE_PASSWORD'] %>
   project:
     <<: *default
-    database: ideardev
+    database: funcore_r
     username: doadmin
     password: <%= ENV['DATABASE_PASSWORD'] %>
   project_replica:
-    database: ideardeb_replay
+    database: funcore_rr
     username: doadmin
     password: <%= ENV['DATABASE_PASSWORD'] %>
     replica: true
