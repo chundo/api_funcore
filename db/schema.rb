@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_06_28_052917) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -42,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_28_052917) do
   create_table "magic_links", force: :cascade do |t|
     t.string "token"
     t.datetime "expires_at"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -60,8 +63,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_28_052917) do
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
-    t.integer "resource_owner_id", null: false
-    t.integer "application_id", null: false
+    t.bigint "resource_owner_id", null: false
+    t.bigint "application_id", null: false
     t.string "token", null: false
     t.integer "expires_in", null: false
     t.text "redirect_uri", null: false
@@ -74,8 +77,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_28_052917) do
   end
 
   create_table "oauth_access_tokens", force: :cascade do |t|
-    t.integer "resource_owner_id"
-    t.integer "application_id", null: false
+    t.bigint "resource_owner_id"
+    t.bigint "application_id", null: false
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
@@ -105,9 +108,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_28_052917) do
     t.string "name"
     t.string "code"
     t.text "description"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "value"
-    t.integer "my_model_id", null: false
+    t.bigint "my_model_id", null: false
     t.boolean "active"
     t.boolean "is_public"
     t.datetime "created_at", null: false
@@ -117,13 +120,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_28_052917) do
   end
 
   create_table "permissions", force: :cascade do |t|
-    t.integer "role_id", null: false
-    t.integer "my_model_id", null: false
+    t.bigint "role_id", null: false
+    t.bigint "my_model_id", null: false
     t.string "action"
     t.string "method"
     t.boolean "allow"
     t.boolean "public"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.boolean "active"
     t.boolean "is_expired"
     t.string "expired_type"
@@ -137,7 +140,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_28_052917) do
 
   create_table "profiles", force: :cascade do |t|
     t.string "name"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -156,9 +159,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_28_052917) do
   end
 
   create_table "user_roles", force: :cascade do |t|
-    t.integer "role_id", null: false
-    t.integer "user_id", null: false
-    t.integer "admin_id"
+    t.bigint "role_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "admin_id"
     t.boolean "active"
     t.boolean "is_expired"
     t.string "expired_type"

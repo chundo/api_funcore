@@ -38,17 +38,14 @@ default: &default
 
 development:
   primary:
+    primary:
     <<: *default
-    adapter: sqlite3
-    database: db/primary.sqlite3
+    url: <%= ENV['DATABASE_URL_A'] %>
   project:
     <<: *default
-    adapter: sqlite3
-    database: db/project.sqlite3
+    url: <%= ENV['DATABASE_URL_B'] %>
   project_replica:
-    <<: *default
-    adapter: sqlite3
-    database: db/project_replica.sqlite3
+    url: <%= ENV['DATABASE_URL_C'] %>
     replica: true
 
 # Warning: The database defined as "test" will be erased and
@@ -61,16 +58,19 @@ test:
 production:
   primary:
     <<: *default
-    database: funcore
-    username: <%= ENV['DATABASE_USERNAME'] %>
-    password: <%= ENV['DATABASE_PASSWORD'] %>
+    url: <%= ENV['DATABASE_URL_A'] %>
+    #database: funcore
+    #username: <%= ENV['DATABASE_USERNAME'] %>
+    #password: <%= ENV['DATABASE_PASSWORD'] %>
   project:
     <<: *default
-    database: funcore_r
-    username: <%= ENV['DATABASE_USERNAME'] %>
-    password: <%= ENV['DATABASE_PASSWORD'] %>
+    url: <%= ENV['DATABASE_URL_B'] %>
+    #database: funcore
+    #username: <%= ENV['DATABASE_USERNAME'] %>
+    #password: <%= ENV['DATABASE_PASSWORD'] %>
   project_replica:
-    database: funcore_rr
-    username: <%= ENV['DATABASE_USERNAME'] %>
-    password: <%= ENV['DATABASE_PASSWORD'] %>
+    url: <%= ENV['DATABASE_URL_C'] %>
+    #database: funcore
+    #username: <%= ENV['DATABASE_USERNAME'] %>
+    #password: <%= ENV['DATABASE_PASSWORD'] %>
     replica: true
