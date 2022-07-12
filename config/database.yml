@@ -5,17 +5,17 @@
 #   gem "sqlite3"
 #
 
-default: &default
-  adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
-
 #default: &default
-#  adapter: postgresql
-#  encoding: unicode
-# For details on connection pooling, see Rails configuration guide
-# https://guides.rubyonrails.org/configuring.html#database-pooling
+#  adapter: sqlite3
 #  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#  timeout: 5000
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 #development2:
 #  primary:
@@ -48,20 +48,20 @@ default: &default
 #    database: db/production_project_replica.sqlite3
 #    replica: true
 
-development:
-  primary:
-    <<: *default
-    adapter: sqlite3
-    database: db/primary.sqlite3
-  project:
-    <<: *default
-    adapter: sqlite3
-    database: db/project.sqlite3
-  project_replica:
-    <<: *default
-    adapter: sqlite3
-    database: db/project_replica.sqlite3
-    replica: true
+#development:
+#  primary:
+#    <<: *default
+#    adapter: sqlite3
+#    database: db/primary.sqlite3
+#  project:
+#    <<: *default
+#    adapter: sqlite3
+#    database: db/project.sqlite3
+#  project_replica:
+#    <<: *default
+###    adapter: sqlite3
+#    database: db/project_replica.sqlite3
+#    replica: true
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
