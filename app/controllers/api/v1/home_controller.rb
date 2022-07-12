@@ -209,8 +209,11 @@ class Api::V1::HomeController < AppController
   def index
     date = I18n.l Time.now
     hello = I18n.t 'hello'
+    obj = {
 
-    render json: { message: %(#{hello} v1), date: date }, status: :ok
+    }
+
+    render json: { message: %(#{hello} v1), date: date, data: obj }, status: :ok
   end
 
   def querrys

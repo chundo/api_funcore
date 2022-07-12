@@ -1,8 +1,8 @@
 # config valid for current version and patch releases of Capistrano
 lock '~> 3.17.0'
 
-set :application, 'apiideardev'
-set :repo_url, 'git@github.com:chundo/ideardev.git'
+set :application, 'api_funcore'
+set :repo_url, 'git@github.com:chundo/api_funcore.git'
 
 # Default branch is :master
 # ask :main, `git rev-parse --abbrev-ref HEAD`.chomp
