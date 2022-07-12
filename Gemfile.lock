@@ -501,6 +501,7 @@ DEPENDENCIES
   sassc-rails
   shopify_api
   sidekiq
+  strscan (~> 3.0.0)
   tzinfo-data
 
 RUBY VERSION

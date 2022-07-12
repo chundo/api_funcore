@@ -15,6 +15,8 @@ gem 'puma', '~> 5.0'
 gem 'devise'
 # gem 'devise_token_auth'
 
+gem 'strscan', '~> 3.0.0'
+
 gem 'doorkeeper'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'oauth2'
